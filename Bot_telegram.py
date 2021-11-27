@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import telepot
 from telepot.loop import MessageLoop
 import time
+from random import randint
+
 
 
 
@@ -13,19 +15,27 @@ def inicio(msg):
     bot.sendMessage(chat_id, 'O que gostaria de saber mestre?')
 
 def monitora(msg):
+    lista = open('lista.txt', 'r')
+    lista = lista.read()
+    lista = lista.split()
+    n = len(lista) - 1
+    print(n, ' Lista')
+    i = randint(0,n)
+    print(i)
     tipo1, tipo2, chat_id = telepot.glance(msg)
-    bot.sendMessage(chat_id, msg['text'])
+    bot.sendMessage(chat_id, lista[i])
+    add = open('lista.txt', 'a')
+    add.write(msg['text']+'\n')
 
 pages = set()
-def getlinks(pagesURL):
+def getlinks(msg):
     global pages
-    html = urlopen('https://pt.wikipedia.org/wiki/{}'.format(pagesURL))
+    html = urlopen('https://pt.wikipedia.org/wiki/{}'.format(msg))
     s = BeautifulSoup(html, 'html.parser')
 
     try:
-        print(s.find(id= 'firstHeading'))
-        print(s.find(class_='mw-parser-output').find_all('p'))
-        print(s.find(class_='mw-parser-output').find_all('ul'))
+        x = s.find('div', attrs={'class': 'mw-parser-output'})
+        return 'sucesso'
 
     except AttributeError:
         print('Esta pagina não existe')
