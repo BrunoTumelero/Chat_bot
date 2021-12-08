@@ -5,9 +5,6 @@ from telepot.loop import MessageLoop
 import time
 from random import randint
 
-
-
-
 API = '2123518901:AAF19RESIsJpiq1d4B5dy0AJWC_EzhKT2sQ'
 
 def inicio(msg):

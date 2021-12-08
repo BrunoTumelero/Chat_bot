@@ -2,3 +2,4 @@ __pycache__
 Bot/
 teste.py
 .gitignore
+*json
