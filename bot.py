@@ -1,34 +1,37 @@
-import json
-import sys
-import os
+import json, sys, os
 import subprocess as sp
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
 
 class Uma():
     def __init__(self, name):
         try:
-            memory = open(name+'.json', 'r')
+            memory = open(name+'.json', 'r', encoding='utf8')
         except FileNotFoundError:
             memory = open(name+'.json', 'w')
-            memory.write('[["Uma"], {"Oi": "Olá! Qual seu nome?", "tchau": "Tchau! Tchau!"}]')
+            memory.write('[["Uma"], {"oi": "Olá! Qual seu nome?", "tchau": "Tchau! Tchau!"}]')
             memory.close()
             memory = open(name+'.json', 'r')
         self.name = name
         self.known, self.phrases = json.load(memory)
         memory.close()
         self.historic = [None]
+
     def listen(self, phrase=None):
-        if phrase == None:
-            phrase = input('>: ')
-        phrase = str(phrase)
-#        phrase = phrase.lower()
-        return phrase
+        return phrase.lower()
+
     def think(self, phrase):
         if phrase in self.phrases:
             return self.phrases[phrase]
-        if phrase == 'Aprende':
+        if phrase == 'aprende':
             return 'O que você quer que eu aprenda?'
-        if phrase == 'Forms':
-            return "https://docs.google.com/forms/d/e/1FAIpQLSdmrdGbOZgiK6GyStj9HTBBXIji4AycF6o2ZDjsmG9udgSP2w/viewform"
+#       if phrase == 'p': 
+#           html = urlopen("https://www.google.com/search?q=cotação+vale3f")
+#           print(html)
+#           s = BeautifulSoup(html, 'html.parser')
+#           x = s.find('span', attrs={'jsname=': "vWLAgc"})
+#           print(x)
+#           return x
         
         # historic
         lastPhrase = self.historic[-1]
@@ -36,6 +39,7 @@ class Uma():
             name = self.getName(phrase)
             response = self.answerName(name)
             return response
+     
         if lastPhrase == 'O que você quer que eu aprenda?':
             self.key = phrase
             return 'Digite o que eu devo responder:'
@@ -50,26 +54,30 @@ class Uma():
         except:
             pass
         return 'Não entendi...'
+    
     def getName(self, name):
-        if 'Meu nome é ' in name:
-            name = name[12:]
+        if 'meu nome é ' in name:
+            name = name[11:]
         name = name.title()
         return name
+
     def answerName(self, name):
         if name in self.known:
-            if name != 'Severina':
+            if name != 'Uma':
                 phrase = 'Eaew, '
             else:
-                phrase = 'E se somos Severinas iguais em tudo na vida, morreremos de morte igual, mesma morte severina.'
+                return 'Você tambem é um elfo sabio?'
         else:
             phrase = 'Muito prazer '
             self.known.append(name)
             self.saveMemory()
         return phrase + name + '!'
+
     def saveMemory(self):
         memory = open(self.name+'.json', 'w')
-        json.dump([self.known, self.phrases], memory)
+        json.dump([self.known, self.phrases], memory, indent=2)
         memory.close()
+
     def speak(self, phrase):
         if 'Executa ' in phrase:
             platform = sys.platform

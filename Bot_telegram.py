@@ -4,8 +4,9 @@ import telepot
 from telepot.loop import MessageLoop
 import time
 from random import randint
+from Telegram_bot import TOKEN
 
-API = '2123518901:AAF19RESIsJpiq1d4B5dy0AJWC_EzhKT2sQ'
+API = TOKEN
 
 def inicio(msg):
     chat_id = telepot.glance(msg)
@@ -27,7 +28,7 @@ def monitora(msg):
 pages = set()
 def getlinks(msg):
     global pages
-    html = urlopen('https://pt.wikipedia.org/wiki/{}'.format(msg))
+    html = urlopen('https://www.google.com/search?q=cotação+{}'.format(msg))
     s = BeautifulSoup(html, 'html.parser')
 
     try:
