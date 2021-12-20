@@ -29,7 +29,7 @@ class Uma():
 #           html = urlopen("https://www.google.com/search?q=cotação+vale3f")
 #           print(html)
 #           s = BeautifulSoup(html, 'html.parser')
-#           x = s.find('span', attrs={'jsname=': "vWLAgc"})
+#           x = s.find('span', attrs={'jsname=': "vWLAgc"}) 
 #           print(x)
 #           return x
         
