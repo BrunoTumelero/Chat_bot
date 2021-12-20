@@ -1,4 +1,4 @@
-import sys, json, time, telepot
+import json, time, telepot
 from telepot.loop import MessageLoop
 from bot import Uma
 

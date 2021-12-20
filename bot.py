@@ -1,7 +1,8 @@
-import json
-import sys
-import os
+import json, sys, os
 import subprocess as sp
+from urllib.request import urlopen
+from bs4 import BeautifulSoup
+from pandas import DataFrame
 
 class Uma():
     def __init__(self, name):
@@ -22,13 +23,21 @@ class Uma():
         phrase = str(phrase)
 #        phrase = phrase.lower()
         return phrase
+    
     def think(self, phrase):
+        url_base = 'https://pt.wikipedia.org/wiki/Dinheiro'
+        def request_data(url, tag, attr):
+            html = urlopen(url)
+            bs = BeautifulSoup(html, 'html.parser')
+            data = bs.find_all(tag, {"class": attr})
+            return data
         if phrase in self.phrases:
             return self.phrases[phrase]
         if phrase == 'Aprende':
             return 'O que você quer que eu aprenda?'
-        if phrase == 'Forms':
-            return "https://docs.google.com/forms/d/e/1FAIpQLSdmrdGbOZgiK6GyStj9HTBBXIji4AycF6o2ZDjsmG9udgSP2w/viewform"
+        if phrase == 'valor':
+            data = request_data(url_base, 'div', 'mw-parser-output"')
+            print(data, '>>> SITE')
         
         # historic
         lastPhrase = self.historic[-1]
@@ -57,10 +66,10 @@ class Uma():
         return name
     def answerName(self, name):
         if name in self.known:
-            if name != 'Severina':
+            if name != 'Uma':
                 phrase = 'Eaew, '
             else:
-                phrase = 'E se somos Severinas iguais em tudo na vida, morreremos de morte igual, mesma morte severina.'
+                phrase = 'Eu sou um elfo sabio que foi amaldiçoado me tornando o homem mais feio do mundo'
         else:
             phrase = 'Muito prazer '
             self.known.append(name)
